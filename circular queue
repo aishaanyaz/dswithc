@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+#define MAX 3
+void insert();
+int del();
+void display();
+int front=-1,rear=-1,queue[20];
+void main()
+{
+    int ch,t;
+        while(1)
+    {
+            printf("Enter your choice: \n1:Insert\n2:Delete\n3:Display\n4:Exit");
+            scanf("%d",&ch);
+
+            switch(ch)
+                    {
+                      case 1:insert();
+                      break;
+                      case 2:
+                        if(front==-1 && rear==-1)
+                        {
+                            printf("Underflow\n");
+                        }
+                        else
+                        {
+                            t=del();
+                            printf("Deleted element is %d",t);
+                        }  
+                      break;
+                      case 3:display();
+                      break;
+                      case 4:exit(0);
+                      break;
+                      default: printf("Invalid Choice\n");
+                      break;
+                    }
+    }        
+}
+
+void insert()
+{
+    int no;
+    if(front==(rear+1)%MAX)
+    {
+        printf("Circular Queue is full");
+        return;
+    }
+    printf("Enter the element to be inserted: ");
+    scanf("%d",&no);
+    if(rear==-1 && front==-1)
+    {
+        rear=0;
+        front=0;
+    }
+    else
+    {
+        rear=((rear+1)%MAX);
+    }
+    queue[rear]=no;
+    return;
+}
+
+int del()
+{
+    int temp;
+    temp=queue[front];
+     if(front==rear)
+    {
+        front=-1;
+        rear=-1;
+    }
+    else
+    {
+        front=((front+1)%MAX);
+    }
+    return temp;
+}
+void display()
+{
+    if(rear==-1 && front==-1)
+    {
+        printf("No elements to display");
+        return;
+    }
+   
+    printf("Content is \n");
+    if(front<=rear)
+    {
+        for(int i=front;i<=rear;i++)
+        {
+            printf("%d\n",queue[i]);
+   
+        }
+    }
+    else
+    {
+        for(int i=front;i<=MAX-1;i++)
+        {
+            printf("%d\n",queue[i]);
+        }
+        for(int i=0;i<=rear;i++)
+        {
+            printf("%d\n",queue[i]);
+        }
+    }
+
+   
+}
