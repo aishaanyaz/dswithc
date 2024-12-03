@@ -1,0 +1,144 @@
+#include <stdlib.h>
+
+void create();
+void display();
+void insertbeg();
+void delpos();
+
+struct Node {
+    int data;
+    struct Node *prev, *next;
+};
+typedef struct Node node;
+
+node *new1, *start = NULL, *temp, *prev, *curr;
+int ch;
+
+void main() {
+    while (1) {
+        printf("Enter your Choice:\n 1: Create\n 2: Insert at the beginning\n 3: Delete a given element\n 4: Display\n 5: Exit\n");
+        scanf("%d", &ch);
+        switch (ch) {
+            case 1: create();
+                break;
+            case 2: insertbeg();
+                break;
+            case 3: delpos();
+                break;
+            case 4: display();
+                break;
+            case 5: exit(0);
+                break;
+            default: printf("Invalid choice\n");
+                break;
+        }
+    }
+}
+
+void create() {
+    char ch;
+    new1 = (node*)malloc(sizeof(node));
+    printf("Enter data: ");
+    scanf("%d", &new1->data);
+    new1->prev = NULL;
+    new1->next = NULL;
+    start = new1;
+    curr = new1;
+    
+    while (1) {
+        printf("Do you want to add another node? (Y/n): ");
+        getchar(); 
+        scanf("%c", &ch);
+        if(ch == 'y' || ch == 'Y') {
+            new1 = (node*)malloc(sizeof(node));
+            printf("Enter data: ");
+            scanf("%d", &new1->data);
+            new1->prev = curr;
+            curr->next = new1;
+            curr = new1;
+        } else {
+            curr->next = NULL;
+            return;
+        }
+    }
+}
+
+void insertbeg() {
+    new1 = (node*)malloc(sizeof(node));
+    printf("Enter value: ");
+    scanf("%d", &new1->data);
+    if (start == NULL) {
+        new1->prev = NULL;
+        new1->next = NULL;
+        start = new1;
+        return;
+    }
+    new1->prev = NULL;
+    new1->next = start;
+    start->prev = new1;
+    start = new1;
+}
+
+void display() {
+    if (start == NULL) {
+        printf("Linked list is empty\n");
+        return;
+    }
+
+    temp = start;
+    printf("Elements of the linked list are: ");
+    while (temp != NULL) {
+        printf("%d", temp->data);
+        temp = temp->next;
+        if (temp != NULL) {
+            printf(" -> ");
+        }
+    }
+    printf("\n");
+}
+
+void delpos() {
+    if (start == NULL) {
+        printf("Linked list is empty\n");
+        return;
+    }
+
+    int ele;
+    printf("Enter the element to delete: ");
+    scanf("%d", &ele);
+
+   
+    if (start->data == ele) {
+        temp = start;
+        start = start->next;
+        if (start != NULL) {
+            start->prev = NULL;
+        }
+        free(temp);
+        if (start == NULL) {
+            printf("The list is now empty.\n");
+        }
+        return;
+    }
+
+ 
+    temp = start;
+    while (temp != NULL && temp->data != ele) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Element not found in the list.\n");
+        return;
+    }
+
+    
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;
+    }
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;
+    }
+    free(temp);
+    printf("Node deleted successfully.\n");
+}
